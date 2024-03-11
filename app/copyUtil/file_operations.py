@@ -137,17 +137,21 @@ class FileOperations:
                 if file.endswith(settings.file_format):
                     # 构建源文件和目标文件的路径
                     source_file = os.path.join(root, file)
-                    # 获取源文件的父目录名称
-                    parent_folder_name = os.path.basename(os.path.abspath(os.path.join(source_file, os.pardir)))
-                    # 构建目标文件的路径，初始化目标文件名为父目录名称加上原始文件名
-                    dest_file = os.path.join(settings.destination_dir, f"{parent_folder_name}_{file}")
+                    # 构建目标文件的路径，初始化目标文件名为原始文件名
+                    dest_file = os.path.join(settings.destination_dir, file)
+
                     # 如果目标文件已经存在，则进一步添加父目录的父目录名称
-                    while os.path.exists(dest_file):
-                        # 获取源文件的父目录的父目录名称
-                        parent_folder_name = os.path.basename(
-                            os.path.abspath(os.path.join(parent_folder_name, os.pardir)))
+                    if os.path.exists(dest_file):
+                        # 获取源文件的父目录名称
+                        parent_folder_name = os.path.basename(os.path.abspath(os.path.join(source_file, os.pardir)))
                         # 更新目标文件的路径
                         dest_file = os.path.join(settings.destination_dir, f"{parent_folder_name}_{file}")
+
+                    # 如果目标文件已经存在，则直接使用源文件完整路径作为目标文件路径
+                    if os.path.exists(dest_file):
+                        # 直接使用源文件完整路径作为目标文件路径
+                        file_name = source_file.replace("/", "_").replace(":", "_").replace(os.path.sep, "_")
+                        dest_file = os.path.join(settings.destination_dir, f"{file_name}")
                     try:
                         # 尝试复制文件
                         shutil.copy2(source_file, dest_file)

@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 from tkinter import filedialog, messagebox
 
 from app.copyUtil.copy_config_params import CopyConfigParams
@@ -87,6 +88,11 @@ class FileCopierGUI:
         self.destination_entry.insert(0, destination_dir)
 
     def start_copy(self):
+        # 如果选择拷贝方式为父目录名，则弹出提示框
+        if self.copy_method_var.get() == "add_parent_dir":
+            self.master.bell()
+            if not messagebox.askyesno("提示", "添加父目录后若出现重复会直接使用根目录作为文件名\n且若还有重名则直接覆盖\n这种方式可能导致文件名过长，是否继续？"):
+                return
         # 清空日志文本框中的内容
         self.clear_log()
         # 从输入框中获取源文件夹路径、目标文件夹路径和目标文件格式
