@@ -1,9 +1,9 @@
 import tkinter as tk
 import os
 from tkinter import filedialog, messagebox
-
 from app.copyUtil.copy_config_params import CopyConfigParams
 from app.copyUtil.file_operations import FileOperations
+
 
 class FileCopierGUI:
     def __init__(self, master):
@@ -13,6 +13,8 @@ class FileCopierGUI:
         self.create_widgets()
         # 初始化拷贝配置参数对象，初始值为空字符串
         self.copyConfigParams = CopyConfigParams("", "", "", "")
+        # 刷新单选按钮的选中状态
+        self.refresh_radio_buttons()
 
     def create_widgets(self):
         # 创建源文件夹路径标签和输入框
@@ -46,13 +48,16 @@ class FileCopierGUI:
         # 设置三个选项的单选按钮
         self.format_label = tk.Label(self.master, text="选择处理重名文件方式:")
         self.format_label.pack()
-        self.overwrite_radio = tk.Radiobutton(self.master, text="覆盖已有文件", variable=self.copy_method_var, value="overwrite")
+        self.overwrite_radio = tk.Radiobutton(self.master, text="覆盖已有文件", variable=self.copy_method_var,
+                                              value="overwrite")
         self.overwrite_radio.pack()
 
-        self.add_number_radio = tk.Radiobutton(self.master, text="添加数字后缀", variable=self.copy_method_var, value="add_number")
+        self.add_number_radio = tk.Radiobutton(self.master, text="添加数字后缀", variable=self.copy_method_var,
+                                               value="add_number")
         self.add_number_radio.pack()
 
-        self.add_parent_dir_radio = tk.Radiobutton(self.master, text="添加父目录名", variable=self.copy_method_var, value="add_parent_dir")
+        self.add_parent_dir_radio = tk.Radiobutton(self.master, text="添加父目录名", variable=self.copy_method_var,
+                                                   value="add_parent_dir")
         self.add_parent_dir_radio.pack()
 
         # 创建按钮框架，包含开始拷贝和清空日志按钮
@@ -91,7 +96,8 @@ class FileCopierGUI:
         # 如果选择拷贝方式为父目录名，则弹出提示框
         if self.copy_method_var.get() == "add_parent_dir":
             self.master.bell()
-            if not messagebox.askyesno("提示", "添加父目录后若出现重复会直接使用根目录作为文件名\n且若还有重名则直接覆盖\n这种方式可能导致文件名过长，是否继续？"):
+            if not messagebox.askyesno("提示",
+                                       "添加父目录后若出现重复会直接使用根目录作为文件名\n且若还有重名则直接覆盖\n这种方式可能导致文件名过长，是否继续？"):
                 return
         # 清空日志文本框中的内容
         self.clear_log()
@@ -113,3 +119,12 @@ class FileCopierGUI:
     def log_message(self, message):
         # 将日志信息插入到日志文本框中
         self.log_text.insert(tk.END, message)
+
+    def refresh_radio_buttons(self):
+        # 根据self.copy_method_var的值设置单选按钮的选中状态
+        if self.copy_method_var.get() == "overwrite":
+            self.overwrite_radio.select()
+        elif self.copy_method_var.get() == "add_number":
+            self.add_number_radio.select()
+        elif self.copy_method_var.get() == "add_parent_dir":
+            self.add_parent_dir_radio.select()

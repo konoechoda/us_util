@@ -12,7 +12,7 @@ def starter():
     # 创建一个 Tkinter 窗口对象
     window = tk.Tk()
     # 设置窗口标题
-    window.title("文件拷贝工具")
+    window.title("同类型文件批量拷贝工具")
     # 设置窗口初始大小
     window.geometry("500x450")
 

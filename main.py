@@ -1,4 +1,5 @@
-from app.copyUtil.__init__ import starter as copyUtil_starter
+from gui import StartupPage
 
 if __name__ == "__main__":
-    copyUtil_starter()
+    startup_page = StartupPage()
+    startup_page.mainloop()
